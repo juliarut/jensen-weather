@@ -6,88 +6,37 @@
 <!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
 <!-- * * * * * * * to get started with your project! * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<main class="flex flex-col items-center justify-center min-h-screen gap-8 bg-gradient-to-b from-sky-100 to-sky-300 p-4">
+  <h1 class="text-3xl font-bold text-gray-800">Vädret i {{ city }}</h1>
 
-<main
-  class="d-flex flex-column justify-content-center align-items-center vh-100"
-  style="gap: 4rem"
->
-  <!-- Knappar -->
-  <div class="d-flex gap-5 mt-5">
+  <input
+    [(ngModel)]="city"
+    placeholder="Skriv stad"
+    class="px-4 py-2 border border-gray-300 rounded shadow-sm text-lg w-64 text-center"
+  />
+
+  <div class="flex gap-4 mt-4">
     <button
-      class="btn rounded-circle d-flex justify-content-center align-items-center"
-      style="
-        width: 160px;
-        height: 160px;
-        font-weight: 600;
-        font-size: 1.25rem;
-        background-color: #5f7470;
-        color: white;
-      "
       (click)="fetchTemperature()"
-      data-bs-toggle="modal"
-      data-bs-target="#weatherModal"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded shadow text-lg font-semibold transition"
     >
-      GET TEMP
+      Hämta Temperatur
     </button>
 
     <button
-      class="btn rounded-circle d-flex justify-content-center align-items-center"
-      style="
-        width: 160px;
-        height: 160px;
-        font-weight: 600;
-        font-size: 1.25rem;
-        background-color: #5f7470;
-        color: white;
-      "
       (click)="downloadCSV()"
       [disabled]="temperature === null"
+      class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded shadow text-lg font-semibold transition disabled:opacity-50"
     >
-      GET CSV
+      Ladda ner CSV
     </button>
   </div>
 
-  <!-- Inputfält -->
-  <input
-    [(ngModel)]="city"
-    placeholder="Enter city"
-    class="form-control text-center"
-    style="width: 250px; font-size: 1.25rem"
-  />
-
-  <!-- Modal -->
-  <div
-    class="modal fade"
-    id="weatherModal"
-    tabindex="-1"
-    aria-labelledby="weatherModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title w-100 text-center fs-4">Weather Info</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <ng-container *ngIf="temperature !== null; else loading">
-            <div class="text-center w-100">
-              Current Temperature in {{ city }}: {{ temperature }} °C
-            </div>
-          </ng-container>
-          <ng-template #loading> Loading temperature... </ng-template>
-        </div>
-      </div>
-    </div>
+  <div class="mt-6 text-xl text-gray-700" *ngIf="temperature !== null">
+    Aktuell temperatur i <strong>{{ city }}</strong>: <strong>{{ temperature }} °C</strong>
   </div>
 </main>
 
-<router-outlet></router-outlet>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->

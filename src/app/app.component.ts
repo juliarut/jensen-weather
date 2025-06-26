@@ -1,23 +1,32 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WeatherService } from './services/weather.service';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterOutlet],
+  imports: [CommonModule, FormsModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   private weatherService = inject(WeatherService);
   city = 'Boden';
   temperature: number | null = null;
   temperatureData: { city: string; temperature: number }[] = [];
 
+  ngOnInit(): void {
+    const savedCity = localStorage.getItem('city');
+    if (savedCity) {
+      this.city = savedCity;
+      this.fetchTemperature();
+    }
+  }
+
   fetchTemperature() {
+    localStorage.setItem('city', this.city);
+
     this.weatherService.getTemperatureByCity(this.city).subscribe({
       next: (temp) => {
         this.temperature = temp;
