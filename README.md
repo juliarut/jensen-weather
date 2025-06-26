@@ -2,6 +2,12 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.15.
 
+This is a weather application built for the coding test at Jensen Education. The app retrieves current temperature data for a selected city using the Open-Meteo API and displays it to the user. The app is built entirely with Angular and styled with Tailwind CSS and Bootstrap.
+
+You can also download the weather information as a CSV file.
+
+I chose to build the application in Angular because it allowed me to use native TypeScript tools and a reactive approach. Initially, I considered saving previous searches with callbacks and possibly adding a backend, but this turned out to be manageable directly in the Angular frontend.
+
 ## Development server
 
 To start a local development server, run:
@@ -53,6 +59,13 @@ ng e2e
 ```
 
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+
+## Future Improvements
+Creating a .NET backend for persistence and user management.
+
+Displaying weather icons based on conditions.
+
+Making the UI responsive for mobile use.
 
 ## Additional Resources
 
