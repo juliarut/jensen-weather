@@ -11,6 +11,9 @@ import { WeatherService } from './services/weather.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  title(title: any) {
+    throw new Error('Method not implemented.');
+  }
   private weatherService = inject(WeatherService);
   city = 'Boden';
   temperature: number | null = null;
@@ -35,6 +38,24 @@ export class AppComponent implements OnInit {
       error: (err) =>
         console.error(`Error fetching temperature for ${this.city}`, err),
     });
+  }
+
+  fetchWeatherByLocation() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        this.weatherService.getCityFromCoordinates(lat, lon).subscribe({
+          next: (cityName) => {
+            this.city = cityName;
+            this.fetchTemperature();
+          },
+          error: (err) =>
+            console.error('Geolocation lookup failed:', err),
+        });
+      },
+      (error) => console.error('Error getting location', error)
+    );
   }
 
   downloadCSV() {

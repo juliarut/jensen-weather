@@ -22,13 +22,28 @@ export class WeatherService {
         return { lat: loc.lat, lon: loc.lon };
       }),
       catchError(() => {
-        return of({ lat: 65.8251, lon: 21.6880 }); // Boden
+        
+        return of({ lat: 65.8251, lon: 21.6880 });
       }),
       switchMap(({ lat, lon }) => {
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`;
         return this.http.get<WeatherResponse>(url);
       }),
       map((response) => response.current.temperature_2m)
+    );
+  }
+
+
+  getCityFromCoordinates(lat: number, lon: number): Observable<string> {
+    const reverseGeoUrl = `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=${this.geoApiKey}`;
+
+    return this.http.get<GeoapifyResponse>(reverseGeoUrl).pipe(
+      map((res) => {
+        const city = res.features[0]?.properties.city;
+        if (!city) throw new Error('City not found from coordinates');
+        return city;
+      }),
+      catchError(() => of('Boden')) 
     );
   }
 }

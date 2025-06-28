@@ -3,6 +3,7 @@ export interface GeoapifyResponse {
     properties: {
       lat: number;
       lon: number;
+      city?: string;
     };
   }[];
 }

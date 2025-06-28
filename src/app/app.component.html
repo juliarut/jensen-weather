@@ -27,4 +27,12 @@
   <div class="mt-6 text-xl text-gray-700" *ngIf="temperature !== null">
     Aktuell temperatur i <strong>{{ city }}</strong>: <strong>{{ temperature }} °C</strong>
   </div>
+
+  <button
+    class=" btn btn-secondary"
+    (click)="fetchWeatherByLocation()"
+    >
+    GET TEMPERATURE BY LOCATION
+  </button>
 </main>
+
