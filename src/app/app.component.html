@@ -7,12 +7,19 @@
     class="px-4 py-2 border border-gray-300 rounded shadow-sm text-lg w-64 text-center"
   />
 
-  <div class="flex gap-4 mt-4">
+  <div class="flex gap-4 mt-4 flex-wrap justify-center">
     <button
       (click)="fetchTemperature()"
       class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded shadow text-lg font-semibold transition"
     >
       Hämta Temperatur
+    </button>
+
+    <button
+      (click)="fetchWeatherByLocation()"
+      class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded shadow text-lg font-semibold transition"
+    >
+      Använd Min Plats
     </button>
 
     <button
@@ -24,15 +31,8 @@
     </button>
   </div>
 
-  <div class="mt-6 text-xl text-gray-700" *ngIf="temperature !== null">
-    Aktuell temperatur i <strong>{{ city }}</strong>: <strong>{{ temperature }} °C</strong>
+  <div class="mt-6 text-xl text-gray-700 text-center" *ngIf="temperature !== null">
+    Aktuell temperatur i <strong>{{ city }}</strong>: <strong>{{ temperature }} °C</strong><br />
+    <span *ngIf="description">Väder: {{ description }}</span>
   </div>
-
-  <button
-    class=" btn btn-secondary"
-    (click)="fetchWeatherByLocation()"
-    >
-    GET TEMPERATURE BY LOCATION
-  </button>
 </main>
-

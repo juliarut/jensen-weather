@@ -11,13 +11,11 @@ import { WeatherService } from './services/weather.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  title(title: any) {
-    throw new Error('Method not implemented.');
-  }
   private weatherService = inject(WeatherService);
   city = 'Boden';
   temperature: number | null = null;
-  temperatureData: { city: string; temperature: number }[] = [];
+  description: string | null = null;
+  temperatureData: { city: string; temperature: number; description: string }[] = [];
 
   ngOnInit(): void {
     const savedCity = localStorage.getItem('city');
@@ -31,9 +29,10 @@ export class AppComponent implements OnInit {
     localStorage.setItem('city', this.city);
 
     this.weatherService.getTemperatureByCity(this.city).subscribe({
-      next: (temp) => {
-        this.temperature = temp;
-        this.temperatureData.push({ city: this.city, temperature: temp });
+      next: ({ temperature, description }) => {
+        this.temperature = temperature;
+        this.description = description;
+        this.temperatureData.push({ city: this.city, temperature, description });
       },
       error: (err) =>
         console.error(`Error fetching temperature for ${this.city}`, err),
@@ -43,25 +42,24 @@ export class AppComponent implements OnInit {
   fetchWeatherByLocation() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-        this.weatherService.getCityFromCoordinates(lat, lon).subscribe({
-          next: (cityName) => {
-            this.city = cityName;
-            this.fetchTemperature();
-          },
-          error: (err) =>
-            console.error('Geolocation lookup failed:', err),
+        const { latitude, longitude } = position.coords;
+        this.weatherService.getCityFromCoordinates(latitude, longitude).subscribe((city) => {
+          this.city = city;
+          this.fetchTemperature();
         });
       },
-      (error) => console.error('Error getting location', error)
+      (error) => {
+        console.error('Geolocation error:', error);
+      }
     );
   }
 
   downloadCSV() {
-    const header = 'City,Temperature (°C)\n';
-    const data = `${this.city},${this.temperature ?? 'N/A'}\n`;
-    const csvContent = '\uFEFF' + header + data;
+    const header = 'City,Temperature (°C),Description\n';
+    const rows = this.temperatureData
+      .map((entry) => `${entry.city},${entry.temperature},${entry.description}`)
+      .join('\n');
+    const csvContent = '\uFEFF' + header + rows;
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
